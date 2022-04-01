@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
 import unittest
@@ -25,11 +26,11 @@ class NewVisitorTest(unittest.TestCase):
         # Она видит, что заголовок и шапка страницы говорят о
         # списках неотложных дел
         self.assertIn('To-Do', self.browser.title)
-        header_text = self.browser.find_element('h1').text
+        header_text = self.browser.find_element(by=By.TAG_NAME, value='h1').text
         self.assertIn('To-Do', header_text)
 
         # Ей сразу же предлагается ввести элемент списка
-        inputbox = self.browser.find_element('id_new_item')
+        inputbox = self.browser.find_element(by=By.ID, value='id_new_item')
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
             'Enter a to-do item'
@@ -44,10 +45,11 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
 
-        table = self.browser.find_element('id_list_table')
-        rows = table.find_elements('tr')
+        table = self.browser.find_element(by=By.ID, value='id_list_table')
+        rows = table.find_elements(by=By.TAG_NAME, value='tr')
         self.assertTrue(
-            any(row.text == '1: Купить павлиньи перья' for row in rows)
+            any(row.text == '1: Купить павлиньи перья' for row in rows),
+            "Новый элемент списка не появился таблице"
         )
 
         # Текстовое поле по-прежнему приглашает ее добавить еще один элемент.
