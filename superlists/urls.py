@@ -21,5 +21,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # добавлена домашняя страница
     re_path(r'^$', views.home_page, name='home'),
+    # добавлена страница нового списка
+    re_path(r'^lists/new$', views.new_list, name='new_list'),
+    # добавлена страница созданного списка
     re_path(r'^lists/some_list/$', views.view_list)
 ]
