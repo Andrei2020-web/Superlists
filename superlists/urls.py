@@ -19,7 +19,7 @@ from lists import views as list_views
 from lists import urls as list_urls
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    #path('admin/', admin.site.urls),
     # добавлена домашняя страница
     re_path(r'^$', list_views.home_page, name='home'),
     # добавлена страница нового списка
