@@ -21,6 +21,4 @@ urlpatterns = [
     re_path(r'^new$', views.new_list, name='new_list'),
     # добавлена страница созданного списка
     re_path(r'^(\d+)/$', views.view_list, name='view_list'),
-    # добавлена страница добавления нового элемента списка
-    re_path(r'^(\d+)/add_item$', views.add_item, name='add_item'),
 ]
