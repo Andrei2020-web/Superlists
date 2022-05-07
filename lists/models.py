@@ -1,11 +1,14 @@
-from collections import defaultdict
-
+from django.urls import reverse
 from django.db import models
+
 
 # Create your models here.
 class List(models.Model):
     ''''Список'''
-    pass
+
+    def get_absolute_url(self):
+        '''получить абсолютный url'''
+        return reverse('view_list', args=[self.id])
 
 
 class Item(models.Model):
