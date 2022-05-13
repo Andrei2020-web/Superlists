@@ -4,7 +4,7 @@ from django.db import models
 
 # Create your models here.
 class List(models.Model):
-    ''''Список'''
+    '''Список'''
 
     def get_absolute_url(self):
         '''получить абсолютный url'''
