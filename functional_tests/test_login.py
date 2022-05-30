@@ -23,7 +23,7 @@ class LoginTest(FunctionalTest):
                                   value='email').send_keys(Keys.ENTER)
 
         # Появляется сообщение, что её на почту было выслано письмо
-        self.wait_for(lambda: self.assertIn('Check your email',
+        self.wait_for(lambda: self.assertIn('Проверьте свою почту',
                                             self.browser.find_element(
                                                 by=By.TAG_NAME,
                                                 value='body').text
