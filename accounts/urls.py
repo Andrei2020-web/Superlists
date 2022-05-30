@@ -6,4 +6,6 @@ urlpatterns = [
     re_path(r'^send_login_email$', views.send_login_email, name='send_login_email'),
     # добавлена страница входа в систему
     re_path(r'^login$', views.login, name='login'),
+    # добавлена страница выхода из системы
+    re_path(r'^logout$', views.logout, name='logout'),
 ]
