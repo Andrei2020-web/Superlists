@@ -161,3 +161,13 @@ class NewListTest(TestCase):
         '''тест: ошибки валидации выводятся надомашней странице'''
         response = self.client.post('/lists/new', data={'text': ''})
         self.assertContains(response, escape(EMPTY_ITEM_ERROR))
+
+
+class MyListsTests(TestCase):
+    """тест представления для моих списков"""
+
+    def test_my_lists_url_renders_my_lists_templates(self):
+        '''тест: используется шаблон my_lists.html для отображения ссылок
+        на мои списки'''
+        response = self.client.get('/lists/users/a@b.com/')
+        self.assertTemplateUsed(response, 'my_lists.html')
