@@ -1,10 +1,13 @@
 from django.urls import reverse
 from django.db import models
+from django.conf import settings
 
 
 # Create your models here.
 class List(models.Model):
     '''Список'''
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True,
+                              on_delete=models.CASCADE)
 
     def get_absolute_url(self):
         '''получить абсолютный url'''
