@@ -13,6 +13,10 @@ class List(models.Model):
         '''получить абсолютный url'''
         return reverse('view_list', args=[self.id])
 
+    @property
+    def name(self):
+        return self.item_set.first()
+
 
 class Item(models.Model):
     ''''элемент списка'''
