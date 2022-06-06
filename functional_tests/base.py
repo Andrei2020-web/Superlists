@@ -5,8 +5,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.common.exceptions import WebDriverException
+from django.conf import settings
+from django.contrib.auth import BACKEND_SESSION_KEY, SESSION_KEY, get_user_model
+from django.contrib.sessions.backends.db import SessionStore
 
 MAX_WAIT = 10
+
+User = get_user_model()
 
 
 class FunctionalTest(StaticLiveServerTestCase):
@@ -45,6 +50,21 @@ class FunctionalTest(StaticLiveServerTestCase):
         num_rows = len(self.browser.find_elements(by=By.CSS_SELECTOR,
                                       value='#id_list_table tr'))
         self.wait_for_row_in_list_table(f'{num_rows}: {item_text}')
+
+    def create_pre_authenticated_sessions(self, email):
+        '''создать предварительно аутентифицированный сеанс'''
+        user = User.objects.create(email=email)
+        session = SessionStore()
+        session[SESSION_KEY] = user.pk
+        session[BACKEND_SESSION_KEY] = settings.AUTHENTICATION_BACKENDS[0]
+        session.save()
+        ## установить cookie, которые нужны для первого посещения домена.
+        ## страницы 404 загружаются быстрее всего!
+        self.browser.add_cookie(dict(
+            name=settings.SESSION_COOKIE_NAME,
+            value=session.session_key,
+            path='/'
+        ))
 
     @wait
     def wait_for_row_in_list_table(self, row_text):
