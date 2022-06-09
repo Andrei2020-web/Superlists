@@ -1,6 +1,5 @@
 from .base import FunctionalTest
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
+from .list_page import ListPage
 
 
 class LayoutAndStylingTest(FunctionalTest):
@@ -13,7 +12,9 @@ class LayoutAndStylingTest(FunctionalTest):
         self.browser.set_window_size(1024, 768)
 
         # Она замечает, что поле ввода аккуратно центрировано
-        inputbox = self.get_item_input_box()
+        list_page = ListPage()
+        list_page.test = self
+        inputbox = list_page.get_item_input_box()
         self.assertAlmostEqual(
             inputbox.location['x'] + inputbox.size['width'] / 2,
             512,
@@ -22,10 +23,9 @@ class LayoutAndStylingTest(FunctionalTest):
 
         # Она начинает новый список и видит, что поле ввода там тоже
         # аккуратно центрировано
-        inputbox.send_keys('testing')
-        inputbox.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('1: testing')
-        inputbox = self.get_item_input_box()
+        list_page.add_list_item('testing')
+
+        inputbox = list_page.get_item_input_box()
         self.assertAlmostEqual(
             inputbox.location['x'] + inputbox.size['width'] / 2,
             512,
