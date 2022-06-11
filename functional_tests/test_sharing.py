@@ -63,7 +63,6 @@ class SharingTest(FunctionalTest):
             list_page.get_list_owner(),
             'edith@example.com'
         ))
-
         # Он добавляет элемент в список
         list_page.add_list_item('Hi Edith!')
 
@@ -71,4 +70,3 @@ class SharingTest(FunctionalTest):
         self.browser = edith_browser
         self.browser.refresh()
         list_page.wait_for_row_in_list_table('Hi Edith!', 2)
-

@@ -80,3 +80,22 @@ class ListModelTest(TestCase):
     def test_list_owner_is_optional(self):
         '''тест: владелец списка является необязательным'''
         List.objects.create()  # не должно поднять исключение
+
+    def test_list_can_shared(self):
+        '''тест: списком можно поделиться'''
+        owner = User.objects.create(email='a1@b.com')
+        user = User.objects.create(email='a@b.com')
+        list_ = List.objects.create(owner=owner)
+        list_.shared_with.add(user.email)
+        self.assertIn(user, list_.shared_with.all())
+
+    def test_list_contain_only_add_users(self):
+        '''тест: список содержит только добавленных пользователей-совладельцев'''
+        owner = User.objects.create(email='a@b.com')
+        user1 = User.objects.create(email='a1@b.com')
+        user2 = User.objects.create(email='a2@b.com')
+        list_ = List.objects.create(owner=owner)
+        list_.shared_with.add(user1.email)
+        self.assertIn(user1, list_.shared_with.all())
+        self.assertNotIn(owner, list_.shared_with.all())
+        self.assertNotIn(user2, list_.shared_with.all())

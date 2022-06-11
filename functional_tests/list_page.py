@@ -1,3 +1,4 @@
+import time
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from .base import wait
@@ -23,9 +24,9 @@ class ListPage():
 
     def add_list_item(self, item_text):
         '''добавить элемент списка'''
-
         self.get_item_input_box().send_keys(item_text)
         self.get_item_input_box().send_keys(Keys.ENTER)
+        time.sleep(1)
         self.test.wait_for(lambda: self.test.browser.find_element(by=By.ID,
                                                                   value='id_list_table'))
         num_rows = len(self.get_table_row())
@@ -39,8 +40,10 @@ class ListPage():
 
     def get_shared_with_list(self):
         '''получить список от того, кто им делится'''
-        return self.test.browser.find_elements(by=By.CSS_SELECTOR,
-                                               value='.list-sharee')
+        Shared_list = self.test.browser.find_element(by=By.ID,
+                                                     value="Shared_lists")
+        return Shared_list.find_elements(by=By.TAG_NAME,
+                                         value='li')
 
     def share_list_with(self, email):
         '''поделиться списком с '''

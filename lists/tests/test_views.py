@@ -190,3 +190,54 @@ class MyListsTests(TestCase):
         correct_user = User.objects.create(email='a@b.com')
         response = self.client.get('/lists/users/a@b.com/')
         self.assertEqual(response.context['owner'], correct_user)
+
+
+class ShareListTest(TestCase):
+    '''тест поделиться моим списком'''
+
+    def test_post_redirects_to_lists_page(self):
+        '''тест: переадресует после post-запроса на страницу списка'''
+        new_list = List.objects.create()
+        response = self.client.post(f'/lists/{new_list.id}/share')
+        self.assertRedirects(response, f'/lists/{new_list.id}/')
+
+    def test_user_add_in_list(self):
+        '''тест: пользователь добавляется в лист'''
+        owner = User.objects.create(email='a1@b.com')
+        user = User.objects.create(email='a2@b.com')
+        new_list = List.objects.create(owner=owner)
+        self.client.post(f'/lists/{new_list.id}/share',
+                         data={'share': user.email})
+        self.assertIn(user, new_list.shared_with.all())
+
+    def test_displays_only_added_users_for_that_list(self):
+        '''тест: отображаются пользователи-совладельцы только для этого списка'''
+        owner = User.objects.create(email='a3@b.com')
+        user1 = User.objects.create(email='a4@b.com')
+        user2 = User.objects.create(email='a5@b.com')
+        user3 = User.objects.create(email='a6@b.com')
+        list1 = List.objects.create(owner=owner)
+        list2 = List.objects.create(owner=owner)
+        list1.shared_with.add(user1.email)
+        list1.shared_with.add(user2.email)
+        list2.shared_with.add(user3.email)
+
+        response_get_list1 = self.client.get(f'/lists/{list1.id}/')
+        response_get_list2 = self.client.get(f'/lists/{list2.id}/')
+
+        self.assertContains(response_get_list1, user1.email)
+        self.assertContains(response_get_list1, user2.email)
+        self.assertNotContains(response_get_list1, user3.email)
+
+        self.assertContains(response_get_list2, user3.email)
+        self.assertNotContains(response_get_list2, user1.email)
+        self.assertNotContains(response_get_list2, user2.email)
+
+    def test_my_lists_displays_shared_lists(self):
+        '''тест: мои списки отображают списки, которыми со мной поделились'''
+        user = User.objects.create(email='a7@b.com')
+        owner = User.objects.create(email='a8@b.com')
+        list = List.objects.create(owner=owner)
+        list.shared_with.add(user.email)
+        response = self.client.get(f'/lists/users/{user.email}/')
+        self.assertContains(response, list.name)
