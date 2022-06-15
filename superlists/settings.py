@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'lists',
     # добавлено приложение accounts
     'accounts',
+    # добавлено приложение behave_django
+    'behave_django',
+
 ]
 
 MIDDLEWARE = [
