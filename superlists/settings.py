@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'accounts',
     # добавлено приложение behave_django
     'behave_django',
+    # добавлено приложение DRF
+    'rest_framework',
 
 ]
 

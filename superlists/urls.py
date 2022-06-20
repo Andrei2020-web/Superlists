@@ -18,6 +18,7 @@ from django.urls import include, path, re_path
 from lists import views as list_views
 from lists import urls as list_urls
 from accounts import urls as accounts_urls
+from lists.api import router
 
 urlpatterns = [
     #path('admin/', admin.site.urls),
@@ -27,4 +28,6 @@ urlpatterns = [
     re_path(r'^lists/', include(list_urls)),
     # добавлена страница учётной записи
     re_path(r'^accounts/', include(accounts_urls)),
+    # добавлена страница api
+    re_path(r'^api/', include(router.urls)),
 ]
