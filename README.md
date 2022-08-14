@@ -1,4 +1,4 @@
-# superlists
+# Superlists
 ___
 ![python_version](https://img.shields.io/badge/python-3.10-orange)
 ![django_version](https://img.shields.io/badge/django-3.2.12-orange)
